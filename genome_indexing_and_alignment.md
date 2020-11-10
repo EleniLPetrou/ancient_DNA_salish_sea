@@ -22,9 +22,13 @@ bowtie2-build $BASEDIR'/'$REF $BASENAME
 ## Explanation of terms:
 
 bowtie2 -q -x <bt2-idx> -U <r> -S <sam>
+
 *q query input files are in fastq format
-*x <bt2-idx> Indexed "reference genome" filename prefix (minus trailing .X.bt2).
+
+*x <bt2-idx> Indexed "reference genome" filename prefix (minus trailing .X.bt2)
+
 *U <r> Files with unpaired reads.
+
 *S <sam> File for SAM output (default: stdout)
 
 ``` bash
