@@ -6,7 +6,7 @@ After I downloaded the genome, I indexed it using bowtie2. This compresses the s
 
 # Index Genome
 
-'''bash
+''' bash
 
 BASEDIR=~/media/ubuntu/Herring_aDNA/atlantic_herring_genome_chromosomes # Path to the base directory for the project.
 REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome
@@ -27,7 +27,7 @@ bowtie2 -q -x <bt2-idx> -U <r> -S <sam>
 -U <r> Files with unpaired reads.
 -S <sam> File for SAM output (default: stdout)
 
-'''bash
+''' bash
 
 BASEDIR=~/media/ubuntu/Herring_aDNA/Herring_mybaits_aDNA/trimmed_fastq # Path to the base directory
 
