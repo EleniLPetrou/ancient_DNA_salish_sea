@@ -4,16 +4,16 @@
 
 After I downloaded the genome, I indexed it using *bowtie2*. This compresses the size of the file and makes queries fast.
 
-# Index Atlantic herring genome
+## Index Atlantic herring genome
 
 ``` bash
 
-BASEDIR=~/media/ubuntu/Herring_aDNA/atlantic_herring_genome_chromosomes # Path to the base directory for the project.
+BASEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome_chromosomes # Path to the base directory for the project.
 REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome
 BASENAME=GCA_900700415 # Write bt2 data to files with this dir/basename
 
 
-bowtie2-build $BASEDIR'/'$REF $BASENAME
+bowtie2-build $BASEDIR'/'$REF $BASEDIR'/'$BASENAME
 
 ```
 
@@ -40,22 +40,20 @@ The raw sequence data looks like this:
 -o : specifies name of the output file
 
 Note that the input file has to be in fasta or fastq format
-In this case, the adapter sequence is the same as *B03.P7.part1.F* in Meyer and Kircher 2010: doi:10.1101/pdb.prot5448
-
-http://cshprotocols.cshlp.org/content/2010/6/pdb.prot5448.abstract
+In this case, the adapter sequence is the same as *B03.P7.part1.F* in Meyer and Kircher 2010: doi:10.1101/pdb.prot5448 - http://cshprotocols.cshlp.org/content/2010/6/pdb.prot5448.abstract
 
 
 
 ``` bash
-BASEDIR=~/media/ubuntu/Herring_aDNA/hybridization_capture/raw_data
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples/raw_data
 ADAPTER=AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
 PHREDSCORE=20
 OVERLAP=1
 MINLENGTH=20
-INPUTFASTQ=Undetermined_S0_L003_R1_001.fastq
-OUTPUT=Undetermined_S0_L003_R1_001_cut.fastq
+INPUT=Undetermined_S0_L003_R1_001.fastq.gz
+OUTPUT=Undetermined_S0_L003_R1_001_cut.fastq.gz
 
-cutadapt -a $ADAPTER -q $PHREDSCORE -O $OVERLAP -m $MINLENGTH -o $OUTPUT $INPUTFASTQ
+cutadapt -a $ADAPTER -q $PHREDSCORE -O $OVERLAP -m $MINLENGTH -o $BASEDIR'/'$OUTPUT $BASEDIR'/'$INPUT
 
 ```
 ### 2. Demultiplex the samples
@@ -83,12 +81,17 @@ To remove the barcode on the 3' end, use the -g argument in cutadapt. Here is an
 
 ``` bash
 
-BASEDIR=~/media/ubuntu/Herring_aDNA/hybridization_capture/raw_data
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples
+BARCODES=raw_data/barcodes.fasta
 MINLENGTH=20
 ERROR=0.125
-INPUTFILE=Undetermined_S0_L003_R1_001_cut.fastq
+INPUTFILE=raw_data/Undetermined_S0_L003_R1_001_cut.fastq.gz
 
-cutadapt -g file:barcodes.fasta -e $ERROR -m $MINLENGTH --no-indels -o "{name}_cut_trim.fastq" $INPUTFILE --discard-untrimmed
+
+
+mkdir $BASEDIR'/'trimmed_fastq #make a directory to store demultiplexed fastq files
+
+cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'trimmed_fastq/"{name}_cut_trim.fastq" $BASEDIR'/'$INPUTFILE 
 
 ```
 
