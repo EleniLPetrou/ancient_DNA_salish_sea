@@ -1,5 +1,4 @@
 
-
 # Trim Illumina adapters from raw ancient sequencing data
 
 Once I had raw sequencing data from the hybridization capture of aDNA, I trimmed Illumina adapters.
@@ -93,7 +92,28 @@ cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --disc
 
 ```
 
+# Quality control of sequencing data using *FastQC*
 
+It is always a great idea to look at the demultiplexed fastq files and verify that:
+1. data quality looks good
+2. there are no adapters still hanging around the sequencing data
 
+I did this using the program *FastQC*
 
+``` bash
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples #path of base directory
+INPUTDIR=$BASEDIR'/'trimmed_fastq #path to fastq files
+
+# Make a directory to hold the fastqc results
+mkdir $BASEDIR'/'fastqc 
+
+# Specify path to the folder where you want the fastqc results to be stored
+OUTPUTDIR=$BASEDIR'/'fastqc 
+
+for FILE in $INPUTDIR'/'*.fastq # for any file ending in .fastq in this directory
+do
+fastqc -f fastq -o ${OUTPUTDIR} ${FILE}
+done
+
+```
 
