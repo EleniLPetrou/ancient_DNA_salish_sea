@@ -59,7 +59,7 @@ mkdir $BASEDIR'/'trimmed_fastq # make a directory to store demultiplexed fastq f
 
 ```
 
-Next, I saved the individual indeces (barcodes) in a fasta file called *barcodes.fasta*. Each sample name is followed by a unique index, like this:
+I saved the individual indeces (barcodes) in a fasta file called *barcodes.fasta*. Each sample name is followed by a unique index, like this:
 
 ``` bash
 >2B_01
@@ -100,7 +100,17 @@ It is always a great idea to look at the demultiplexed fastq files and verify th
 1. data quality looks good
 2. there are no adapters still hanging around the sequencing data
 
-I did this using the program *FastQC*
+I did this using the program *FastQC*. Explanation of *FastQC* arguments used:
+
+-f : Bypasses the normal sequence file format  detection  and  forces
+              the  program  to  use  the  specified format.  Valid formats are
+              bam,sam,bam_mapped,sam_mapped and fastq
+              
+-o : Create all output  files  in  the  specified  output  directory.
+              Please  note  that this directory must exist as the program will
+              not create it.  If this option is not set then the  output  file
+              for  each  sequence file is created in the same directory as the
+              sequence file which was processed.
 
 ``` bash
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples #path of base directory
@@ -114,10 +124,16 @@ OUTPUTDIR=$BASEDIR'/'fastqc
 
 for FILE in $INPUTDIR'/'*.fastq # for any file ending in .fastq in this directory
 do
-fastqc -f fastq -o ${OUTPUTDIR} ${FILE}
+fastqc -f fastq --extract -o $OUTPUTDIR $FILE
 done
 
 ```
-## Take a look at the FastQC output and verify that sequencing quality is good and adapters are not present. Yay!
+## Take a look at the FastQC output 
 
-Here is an example of FastQC file for one of the ancient samples:
+Let's verify that sequencing quality is good and adapters are not present. Yay!
+
+Here is an example of FastQC file for one of the ancient samples (2B_01):
+
+![quality-img](example_figures/fastqc_quality.png)
+
+![adapter-img](example_figures/fastqc_adapter.png)
