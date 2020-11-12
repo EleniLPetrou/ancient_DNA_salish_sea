@@ -5,6 +5,8 @@ Once I had raw sequencing data from the hybridization capture of aDNA, I trimmed
 
 The raw sequence data looks like this:
 
+![seq-img](example_figures/sequence_adapters.png)
+
  * The barcode (P5 index) is on the 5' end 
  * The p7 adaptor is on the 3' end
 
@@ -116,4 +118,6 @@ fastqc -f fastq -o ${OUTPUTDIR} ${FILE}
 done
 
 ```
+## Take a look at the FastQC output and verify that sequencing quality is good and adapters are not present. Yay!
 
+Here is an example of FastQC file for one of the ancient samples:
