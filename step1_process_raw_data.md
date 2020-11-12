@@ -1,22 +1,4 @@
-# Download and index Atlantic herring genome
 
-I used the chromosome-level assembly of the Atlantic herring genome (Pettersson et al. 2019) as a reference genome for this project. Here is the NCBI link to the genome : https://www.ncbi.nlm.nih.gov/genome/genomes/15477
-Assembly ID : GCA_900700415.1
-
-After I downloaded the genome from NCBI, I indexed it using *bowtie2*. indexing compresses the size of the file and makes queries fast.
-
-## Index Atlantic herring genome
-
-``` bash
-
-BASEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome_chromosomes # Path to directory with genome.
-REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome fasta file name
-BASENAME=GCA_900700415 # Write bt2 data to files with this dir/basename
-
-
-bowtie2-build $BASEDIR'/'$REF $BASEDIR'/'$BASENAME
-
-```
 
 # Trim Illumina adapters from raw ancient sequencing data
 
@@ -104,30 +86,13 @@ BARCODES=raw_data/barcodes.fasta # relative path and file name for barcodes
 MINLENGTH=20
 ERROR=0.125 # I used a slightly larger error rate than the default
 INPUTFILE=raw_data/Undetermined_S0_L003_R1_001_cut.fastq.gz # relative path and file name for sequencing data (adapters removed)
+OUTDIR=trimmed_fastq #name of output directory
 
 
-cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'trimmed_fastq/"{name}_cut_trim.fastq" $BASEDIR'/'$INPUTFILE 
-
-```
-
-# Align ancient samples to the genome
-
-## Explanation of terms:
-
-bowtie2 -q -x <bt2-idx> -U <r> -S <sam>
-
--q query input files are in fastq format
-
--x <bt2-idx> Indexed "reference genome" filename prefix (minus trailing .X.bt2)
-
--U <r> Files with unpaired reads.
-
--S <sam> File for SAM output (default: stdout)
-
-``` bash
-
+cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'$OUTDIR'/'"{name}_cut_trim.fastq" $BASEDIR'/'$INPUTFILE 
 
 ```
+
 
 
 
