@@ -47,6 +47,7 @@ OUTPUTDIR=$BASEDIR'/'sam # path to folder with sam files (output)
 
 
 # Loop over each sample fastq file andalign it to genome, then output a sam file
+
 for SAMPLEFILE in `cat $SAMPLELIST`
 do
   bowtie2 -q -x $GENOMEDIR'/'$GENOME -U $FASTQDIR'/'$SAMPLEFILE.fastq -S $OUTPUTDIR'/'$SAMPLEFILE.sam
@@ -60,26 +61,39 @@ Next, I filtered the bam files. I removed any sequences that were shorter than 3
 
 
 *samtools view -S -b sample.sam > sample.bam*
-use the samtools *view* command to convert a sam file to bam file
--S input file is in sam format
--b output file should be in bam format
--q <integer> : discards reads whose mapping quality is below this number
--m <integer.: only outputs alignments with the number of bases greater than or equal to the integer specified
+
+- view: prints all alignments in the specified input alignment file (in SAM, BAM,  or  CRAM format) to standard output. Can use the samtools *view* command to convert a sam file to bam file
+
+-S: input file is in sam format
+
+-b: output file should be in bam format
+
+-q <integer>: discards reads whose mapping quality is below this number
+
+-m <integer>: only outputs alignments with the number of bases greater than or equal to the integer specified
+
+-h: Include the header in the output.
 
 
 *samtools sort [-l level] [-m maxMem] [-o out.bam] [-O format] [-n] -T out.prefix [-@ threads] [in.bam]*
+
 sort : Sort alignments by leftmost coordinates
 
+-o <FILE>: Output to FILE [stdout]
+
 *samtools rmdup [-sS] <input.srt.bam> <out.bam>*
+
 rmdup : Remove potential PCR duplicates: if multiple read pairs have identical external coordinates, only retain the pair with highest mapping quality.
 
 -s : Remove duplicates for single-end reads. By default, the command works for paired-end reads only.
 
 *samtools index [-bc] [-m INT] aln.bam|aln.cram [out.index]*
+
 index : Index a coordinate-sorted BAM or CRAM file for fast random access. Index the bam files to quickly extract alignments overlapping particular genomic regions.This index is needed when region arguments are used to limit samtools view and similar commands to particular regions of interest.
 
 
 ``` bash
+
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples
 SAMPLELIST=$BASEDIR/sample_lists/sample_list.txt # Path to a text file with list of prefixes of the fastq files, separated by newline (so, the file name with no extension). 
 SAMDIR=$BASEDIR'/'sam # path to folder with sam files (input)
@@ -87,12 +101,17 @@ BAMDIR=$BASEDIR'/'bam # path to folder with bam files (output)
 
 for SAMPLEFILE in `cat $SAMPLELIST`
 do
-  samtools view -S -b -q 30 -m 30 SAMDIR'/'$SAMPLEFILE.sam > $BAMDIR'/'$SAMPLEFILE.bam
-  samtools sort $BAMDIR'/'$SAMPLEFILE.bam -o $BAMDIR'/'${SAMPLEFILE}_sorted.bam
-  samtools rmdup -s $BAMDIR'/'${SAMPLEFILE}_sorted.bam $BAMDIR'/'${SAMPLEFILE}_sorted_rd.bam
-  samtools index $BAMDIR'/'${SAMPLEFILE}_sorted_rd.bam
-  samtools view $BAMDIR'/'${SAMPLEFILE}_sorted_rd.bam | wc -l # count the number of alignments
+  samtools view -S -b -h -q 30 -m 30 $SAMDIR'/'$SAMPLEFILE.sam | \
+  # using a unix pipe (input file is taken from previous step and designated by '-')
+  samtools sort - | \
+  samtools rmdup -s - $BAMDIR'/'${SAMPLEFILE}'_sorted_rd.bam'
+  samtools index $BAMDIR'/'${SAMPLEFILE}'_sorted_rd.bam'
+  samtools view $BAMDIR'/'${SAMPLEFILE}'_sorted_rd.bam' | wc -l # count the number of alignments
 done
 
 ```
 
+
+
+
+    
