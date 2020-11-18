@@ -90,7 +90,7 @@ INPUTFILE=raw_data/Undetermined_S0_L003_R1_001_cut.fastq.gz # relative path and 
 OUTDIR=trimmed_fastq #name of output directory
 
 
-cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'$OUTDIR'/'"{name}_cut_trim.fastq" $BASEDIR'/'$INPUTFILE 
+cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'$OUTDIR'/'"{name}.fastq" $BASEDIR'/'$INPUTFILE 
 
 ```
 
