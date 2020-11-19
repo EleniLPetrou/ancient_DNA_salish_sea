@@ -12,6 +12,7 @@ For the *mapDamage2* manuscript, go here: https://academic.oup.com/bioinformatic
 Usage: *mapDamage [options] -i BAMfile -r reference.fasta*
 
 Options for rescaling of BAM files:
+
   --rescale                     Rescale the quality scores in the BAM file using the output from the statistical estimation
   
   --rescale-out=<filename>    Write the rescaled BAM to this file
@@ -29,7 +30,7 @@ GENOMEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome # Path to genome.
 GENOME=GCA_900700415.1_Ch_v2.0.2_genomic.fna #file name of genome
 OUTDIR=$BASEDIR'/'mapdamage_bam
 
-# Command
+# Command o run mapDamage
 
 for SAMPLEFILE in `cat $SAMPLELIST`
 do
@@ -37,8 +38,29 @@ do
   -r $GENOMEDIR'/'$GENOME \
   --rescale \
   --rescale-out=$OUTDIR'/'${SAMPLEFILE}'_sorted_rd_realign.bam' \
-  --folder=$OUTDIR
-  
+  --folder=$OUTDIR'/''results_'${SAMPLEFILE}
 done
+
+# Append the output of mapDamage to some text files for plotting all samples together
+
+cd $OUTDIR #change to the directory containing the mapDamage results
+
+for FOLDER in */ #for every folder in the current directory
+do
+  #remove the header in this file
+	grep -v "pos" ${FOLDER}'/''3pGtoA_freq.txt' | \
+	#append the remaining lines to a new file  
+	cat  >>'3pGtoA_freq_allsamples.txt'
+done
+
+
+for FOLDER in */ #for every folder in the current directory
+do
+  #remove the header in this file
+	grep -v "pos" ${FOLDER}'/''5pCtoT_freq.txt' | \
+	#append the remaining lines to a new file  
+	cat  >>'5pCtoT_freq_allsamples.txt'
+done
+
 
 ```
