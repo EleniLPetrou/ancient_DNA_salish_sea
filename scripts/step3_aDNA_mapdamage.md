@@ -7,7 +7,7 @@ DNA extracted from historical or ancient samples has been degraded by the passag
 To learn how to install *mapDamage2* program, follow this link: https://ginolhac.github.io/mapDamage/
 For the *mapDamage2* manuscript, go here: https://academic.oup.com/bioinformatics/article/29/13/1682/184965
 
-## Running mapDamage2
+## Run mapDamage2
 
 Usage: *mapDamage [options] -i BAMfile -r reference.fasta*
 
@@ -30,7 +30,7 @@ GENOMEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome # Path to genome.
 GENOME=GCA_900700415.1_Ch_v2.0.2_genomic.fna #file name of genome
 OUTDIR=$BASEDIR'/'mapdamage_bam
 
-# Command o run mapDamage
+# Command to run mapDamage
 
 for SAMPLEFILE in `cat $SAMPLELIST`
 do
@@ -47,6 +47,7 @@ cd $OUTDIR #change to the directory containing the mapDamage results
 
 for FOLDER in */ #for every folder in the current directory
 do
+  echo ${FOLDER} # check
   #remove the header in this file
 	grep -v "pos" ${FOLDER}'/''3pGtoA_freq.txt' | \
 	#append the remaining lines to a new file  
@@ -56,6 +57,7 @@ done
 
 for FOLDER in */ #for every folder in the current directory
 do
+  echo ${FOLDER} # check
   #remove the header in this file
 	grep -v "pos" ${FOLDER}'/''5pCtoT_freq.txt' | \
 	#append the remaining lines to a new file  
@@ -64,3 +66,7 @@ done
 
 
 ```
+
+## Plot output of mapDamage
+
+I plotted the estimated 5' and 3' misincorporation frequency using an R script: [plot_mapdamage.R](plot_mapdamage.R)
