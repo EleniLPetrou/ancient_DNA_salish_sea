@@ -70,3 +70,8 @@ done
 ## Plot output of mapDamage
 
 I plotted the estimated 5' and 3' misincorporation frequency using an R script: [plot_mapdamage.R](plot_mapdamage.R)
+
+The resulting plot shows that the older samples have more damage near the ends of sequences, as expected. 
+
+![mapdamage_plot](mapdamage_plot.pdf)
+
