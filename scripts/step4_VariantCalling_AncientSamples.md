@@ -66,4 +66,35 @@ bcftools mpileup --fasta-ref $GENOMEDIR'/'$REF \
 
 ```
 
+### Using *bcftools version 1.9*, use *call* command to do SNP variant calling from VCF/BCF file created in the previous step (mpileup)
 
+Usage:   bcftools call [options] <in.vcf.gz>
+
+--variants-only            output variant sites only
+
+--consensus-caller       command to call genotypes
+
+--output-type <b|u|z|v>     output type: 'b' compressed BCF; 'u' uncompressed BCF; 'z' compressed VCF; 'v' uncompressed VCF [v]
+
+--output <file>             write output to a file [standard output]
+  
+-A, --keep-alts              keep all possible alternate alleles at variant sites
+
+-f, --format-fields <list>      output format fields: GQ,GP
+
+``` bash
+BAMDIR=/media/ubuntu/hybridization_capture/ancient_samples/mapdamage_bam #directory with sorted, indexed, filtered, and base-recalibrated .bam files
+INFILE=mpileup_results.bcf
+OUTFILE=ancient_call_results.bcf
+####
+
+cd $BAMDIR
+bcftools call --variants-only \
+--consensus-caller \
+--keep-alts \
+--format-fields GQ \
+--output-type b \
+--output $OUTFILE \
+$INFILE
+
+```
