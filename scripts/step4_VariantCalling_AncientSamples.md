@@ -46,13 +46,23 @@ INFO/AD  .. Total allelic depth (Number=R,Type=Integer)
 BAMDIR=/media/ubuntu/hybridization_capture/ancient_samples/mapdamage_bam #directory with sorted, indexed, filtered, and base-recalibrated .bam files
 GENOMEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome # Path to directory with genome.
 REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome fasta file name
+BAMLIST=mybamlist.txt
+OUTFILE=mpileup_results.bcf
 #####
 
-#2. Create list of bam files and save to a txt file:
-ls *.bam>mybamlist.txt
+#1. Create list of bam files and save to a txt file:
 
+cd $BAMDIR
+ls *.bam>$BAMLIST
 
-bcftools mpileup --fasta-ref GCA_900700415.1_Ch_v2.0.2_genomic.fna --bam-list mybamlist.txt --skip-indels --output mpileup_results.bcf --output-type b --annotate FORMAT/AD,FORMAT/DP,INFO/AD
+#2. Create multi-way pileup 
+
+bcftools mpileup --fasta-ref $GENOMEDIR'/'$REF \
+--bam-list $BAMDIR'/'$BAMLIST \
+--skip-indels \
+--output $BAMDIR'/'$OUTFILE \
+--output-type b \
+--annotate FORMAT/AD,FORMAT/DP,INFO/AD
 
 ```
 
