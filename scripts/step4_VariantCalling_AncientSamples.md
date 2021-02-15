@@ -1,10 +1,9 @@
-# Description of analyses
 
 ## Variant calling in ancient herring samples
 
 Variant sites were identified separately for ancient and modern samples, using the *mpileup* and *call* (--consensus-caller model) 
 commands in *bcftools version 1.9* (http://samtools.github.io/bcftools/call-m.pdf). Ancient genotypes were filtered with vcftools (Danecek et al. 2011) 
-for genotype quality (--minQ 900) and SNPs were removed from the data set if they were genotyped in fewer than 75% of ancient samples. 
+for genotype quality (--minQ 900) and SNPs were removed from the data set if they were genotyped in fewer than 80% of ancient samples. 
 
 ### Index the herring genome using samtools
 FYI, this index is different from that used by *bowtie2* in earlier steps
