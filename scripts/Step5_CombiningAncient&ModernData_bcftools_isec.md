@@ -1,10 +1,7 @@
 # Combining the ancient and modern genotypes into a data set
 
 The ancient and modern genotype data were combined using *bcftools isec* command, and we retained SNPs that were present in both data sets. 
-Subsequently, genotypes with a read depth below two were recoded as missing, and all individuals with more than 20% missing genotypes were removed from the data. 
-In the modern samples, loci were tested for deviations from Hardy-Weinberg Equilibium (HWE) using the exact test based on 10,000 Monte Carlo permutations of alleles as implemented in the R package 
-in the R package *HWxtest* (Engels 2019). We used the false discovery rate to correct for multiple testing of HWE anda locus was identified as being out of 
-HWE when the q-value was less than 0.05 and it was removed from all subsequent analyses.
+Subsequently, genotypes with less than a read depth of three sequences were recoded as missing, and all individuals with more than 20% missing genotypes were removed from the data. In the modern samples, loci were tested for deviations from Hardy-Weinberg Equilibium (HWE) using the exact test based on 10,000 Monte Carlo permutations of alleles as implemented in the R package in the R package *HWxtest* (Engels 2019). We used the false discovery rate to correct for multiple testing of HWE; a locus was identified as being out of HWE when the q-value was less than 0.05 and it was removed from all subsequent analyses.
 
 ## Merging genotype data with bcftools isec command
  - About:   isec creates intersections, unions and complements of VCF files. 
@@ -68,7 +65,7 @@ HWE when the q-value was less than 0.05 and it was removed from all subsequent a
   - 0003.vcf: for records from $MODERNFILE shared by both $ANCIENTFILE and $MODERNFILE
 
 ## Filtering ancient data for sequencing depth
-After looking at some of the summary statistics plots for the ancient data (0002.vcf), I realized that many of the SNPs identified in the ancient data (N= 7974) were represented by a single read, and could be the result of sequencing error. For this reason, if a SNP had a read depth <3 in the ancient samples, I decided to set that SNP as "missing data".
+After looking at some of the summary statistics plots for the ancient data (0002.vcf), I realized that many of the SNPs identified in the ancient data (N= 7974) were represented by a single read, and could be the result of sequencing error. For this reason, if a SNP had a read depth <3 in the ancient samples, I decided to set that SNP's genotypes to "missing data".
 
 ``` bash
 BASEDIR=/media/ubuntu/hybridization_capture #base directory
@@ -80,9 +77,50 @@ vcftools --vcf 0002.vcf \
 --minDP 3 \
 --recode --recode-INFO-all \
 --out 0002.minDP3
- 
+
+# calculate some summary statistics using vcftools (these will be used for filtering the individuals and genotypes later on)
+vcftools --vcf 0002.minDP3.recode.vcf --depth
+vcftools --vcf 0002.minDP3.recode.vcf --site-mean-depth
+vcftools --vcf 0002.minDP3.recode.vcf --site-quality
+vcftools --vcf 0002.minDP3.recode.vcf --missing-indv
+vcftools --vcf 0002.minDP3.recode.vcf --missing-site
+vcftools --vcf 0002.minDP3.recode.vcf --get-INFO MQ --get-INFO AD --get-INFO GQ
 ```
 
+## Filtering ancient data: remove sites with more than 20% missing data and individuals with more than 20% missing data
+### Create a "badlist" of ancient SNPs with more than 20% missing data.
+``` bash 
+BASEDIR=/media/ubuntu/hybridization_capture #base directory
+MERGEDIR=$BASEDIR'/'merged_analyses/variants
+####
+
+cd $MERGEDIR
+head out.lmiss
+mawk '$6 > 0.20' out.lmiss | cut -f1,2 | mawk '!/CHR/' > ancient_bad_loci.txt
+head ancient_bad_loci.txt
+```
+### Create a "badlist" of ancient individuals with more than 30% missing data.
+``` bash
+BASEDIR=/media/ubuntu/hybridization_capture #base directory
+MERGEDIR=$BASEDIR'/'merged_analyses/variants
+####
+
+cd $MERGEDIR
+head out.imiss
+mawk '$5 > 0.30' out.imiss | cut -f1 | mawk '!/IN/'> ancient_bad_indiv.txt
+cat ancient_bad_indiv.txt
+```
+### Now that we have badlists of ancient sites and individuals, we can remove those sites and samples from our vcf file using vcftools:
+
+``` bash
+vcftools --vcf 0002.minDP3.recode.vcf \
+--remove ancient_bad_indiv.txt \
+--exclude-positions ancient_bad_loci.txt \
+--recode --recode-INFO-all \
+--out 0002.minDP3.filt
+
+```
+### After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7974 Sites
 
 
 
