@@ -52,4 +52,20 @@ HWE when the q-value was less than 0.05 and it was removed from all subsequent a
    bcftools index $MODERNFILE'.gz'
    bcftools index $ANCIENTFILE'.gz'
   
-   ```
+  # Use bcftools isec command to merge the two data sets:
+  
+ bcftools isec $ANCIENTFILE'.gz' $MODERNFILE'.gz' \
+ --collapse all \
+ --output-type v \
+ -p $MERGEDIR
+  
+  ```
+  
+  ## Explanation of output files from bcftools isec:
+  - 0000.vcf: for records private to $ANCIENTFILE
+  - 0001.vcf: for records private to $MODERNFILE
+  - 0002.vcf: for records from $ANCIENTFILE shared by both $ANCIENTFILE AND $MODERNFILE
+  - 0003.vcf: for records from $MODERNFILE shared by both $ANCIENTFILE AND $MODERNFILE
+
+
+  
