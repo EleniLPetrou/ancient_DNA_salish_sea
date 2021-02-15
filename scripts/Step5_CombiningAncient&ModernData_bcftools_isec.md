@@ -64,8 +64,30 @@ HWE when the q-value was less than 0.05 and it was removed from all subsequent a
   ## Explanation of output files from bcftools isec:
   - 0000.vcf: for records private to $ANCIENTFILE
   - 0001.vcf: for records private to $MODERNFILE
-  - 0002.vcf: for records from $ANCIENTFILE shared by both $ANCIENTFILE AND $MODERNFILE
-  - 0003.vcf: for records from $MODERNFILE shared by both $ANCIENTFILE AND $MODERNFILE
+  - 0002.vcf: for records from $ANCIENTFILE shared by both $ANCIENTFILE and $MODERNFILE 
+  - 0003.vcf: for records from $MODERNFILE shared by both $ANCIENTFILE and $MODERNFILE
+
+## Filtering ancient data for sequencing depth
+After looking at some of the summary statistics plots for the ancient data (0002.vcf), I realized that many of the SNPs identified in the ancient data (N= 7974) were represented by a single read, and could be the result of sequencing error. For this reason, if a SNP had a read depth <3 in the ancient samples, I decided to set that SNP as "missing data".
+
+``` bash
+BASEDIR=/media/ubuntu/hybridization_capture #base directory
+MERGEDIR=$BASEDIR'/'merged_analyses/variants
+####
+
+cd $MERGEDIR
+vcftools --vcf 0002.vcf \
+--minDP 3 \
+--recode --recode-INFO-all \
+--out 0002.minDP3
+ 
+```
+
+
+
+
+
+
 
 
   
