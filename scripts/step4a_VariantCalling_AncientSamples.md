@@ -134,7 +134,7 @@ vcftools --vcf $VCF --missing-site
 
 ```
 ### Fixed an irritating little issue with the first two lines of the vcf file
-!!!IMPORTANT!!! When you use the --consensus-caller model in bcftools call, the vcf header lacks the following two header lines:
+When you use the --consensus-caller model in bcftools call, the vcf header lacks the following two header lines:
 
 ##fileformat=VCFv4.2
 
@@ -143,10 +143,15 @@ vcftools --vcf $VCF --missing-site
 Thus, you have to copy and paste these header lines to the top of your vcf file before other programs can read in the vcf. This is how I did it:
 
 ``` bash
+DIR=/media/ubuntu/hybridization_capture/ancient_samples/variants # name of directory with bcf file containing genotype data
+INVCF=ancient_call_results.qual900.miss20.recode.vcf# name of input bcf file
+OUTVCF=ancient_call_results_filt.vcf
+####
+cd $DIR
 
-sed '1 i\##fileformat=VCFv4.2\n##FILTER=<ID=PASS,Description="All filters passed">' ancient_call_results.qual900.miss20.recode.vcf >ancient_call_results_filt.vcf
+sed '1 i\##fileformat=VCFv4.2\n##FILTER=<ID=PASS,Description="All filters passed">' $INVCF>$OUTVCF
 
-less ancient_call_results_filt.vcf #check the header
+less $OUTVCF #check the header
 
 ```
 
