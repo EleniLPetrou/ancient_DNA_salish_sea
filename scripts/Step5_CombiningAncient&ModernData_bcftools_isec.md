@@ -18,7 +18,9 @@ Subsequently, genotypes with less than a read depth of three sequences were reco
               
    --output-type <b|u|z|v>   b: compressed BCF, u: uncompressed BCF, z: compressed VCF, v: uncompressed VCF [v]
     
-  ### Make a new directory and folder that will hold the output of merged analyses: /media/ubuntu/hybridization_capture/merged_analyses/variants
+  ### Make a new directory and folder that will hold the output of merged analyses: 
+  
+  /media/ubuntu/hybridization_capture/merged_analyses/variants
    
    ``` bash
    # Directory names
@@ -87,7 +89,9 @@ vcftools --vcf 0002.minDP3.recode.vcf --missing-site
 vcftools --vcf 0002.minDP3.recode.vcf --get-INFO MQ --get-INFO AD --get-INFO GQ
 ```
 
-## Filtering ancient data: remove sites with more than 20% missing data and individuals with more than 20% missing data
+## Filtering ancient data: 
+ - remove sites with more than 20% missing data and individuals with more than 30% missing data
+
 ### Create a "badlist" of ancient SNPs with more than 20% missing data.
 ``` bash 
 BASEDIR=/media/ubuntu/hybridization_capture #base directory
