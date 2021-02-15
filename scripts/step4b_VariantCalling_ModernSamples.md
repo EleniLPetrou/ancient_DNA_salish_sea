@@ -133,10 +133,15 @@ When you use the --consensus-caller model in bcftools, the vcf header lacks the 
 Thus, you have to copy and paste these header lines to the top of your vcf file before other programs can read in the vcf. This is how I did it:
 
 ``` bash
+DIR=/media/ubuntu/hybridization_capture/modern_samples/variants # name of directory with bcf file containing genotype data
+INVCF=modern_call_results.qual900.miss20.minDP10.minmeanDP10.maf5.vcf # name of input file (from previous step)
+OUTVCF=modern_call_results_filt.vcf
+####
+cd $DIR
 
-sed '1 i\##fileformat=VCFv4.2\n##FILTER=<ID=PASS,Description="All filters passed">' modern_call_results.qual900.miss20.recode.vcf >modern_call_results_filt.vcf
+sed '1 i\##fileformat=VCFv4.2\n##FILTER=<ID=PASS,Description="All filters passed">' $INVCF>$OUTVCF
 
-less modern_call_results_filt.vcf #check the header
+less $OUTVCF #check the header
 
 ```
 
