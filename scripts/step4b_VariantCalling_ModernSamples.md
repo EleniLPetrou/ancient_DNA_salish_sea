@@ -1,8 +1,6 @@
 ## Variant calling in modern herring samples
 
-Variant sites were identified separately for ancient and modern samples, using the *mpileup* and *call* (--consensus-caller model) 
-commands in *bcftools version 1.9* (http://samtools.github.io/bcftools/call-m.pdf).Modern genotypes were filtered with vcftools (Danecek et al. 2011) 
-for genotype quality (--minQ 900) and SNPs were removed from the data set if they were genotyped in fewer than 80% of samples. 
+Variant sites were identified separately for ancient and modern samples, using the *mpileup* and *call* (--consensus-caller model) commands in *bcftools version 1.9* (http://samtools.github.io/bcftools/call-m.pdf). Modern genotypes were filtered with *vcftools* (Danecek et al. 2011) for genotype quality (--minQ 900) and SNPs were removed from the data set if they were genotyped in fewer than 80% of samples, had a read depth and mean read depth that was below 10 sequences (--min-meanDP 10, --minDP 10), and were characterized by a minor allele frequency that was less than 0.05 (--maf 0.05). 
 
 
 ### Using *bcftools version 1.9*, use *mpileup* command to create multi-way pileup and calculate genotype likelihoods.
@@ -90,7 +88,7 @@ $INFILE
 
 ### Filter the genotypes for quality using *bcftools* and missing data using *vcftools*
 
-I did this iteratively, starting with very permissive thresholds (MINQ== 30; missing data = 75%) and visualizing the distribution of samples and genotypes. I observed that relatively few individuals and SNPs were characterized by large amounts of low-quality or missing data, so I happily proceeded to filter the genotypes using more stringent thresholds (minQ==900; missing data = 20%). For the sake of brevity, I show the final filtering criteria here: 
+I did this iteratively, starting with very permissive thresholds (MINQ== 30; missing data = 75%) and visualizing the distribution of samples and genotypes. I observed that relatively few individuals and SNPs were characterized by large amounts of low-quality or missing data, so I happily proceeded to filter the genotypes using more stringent thresholds (minQ==900; missing data = 20%, minDP= 10, min-meanDP =10, maf = 0.05). For the sake of brevity, I show the final filtering criteria here: 
 
 - minQ 900:  QUAL > 900
 
@@ -126,7 +124,7 @@ vcftools --vcf $VCF --missing-site
 
 ```
 ### Fixed an irritating little issue with the first two lines of the vcf file
-!!!IMPORTANT!!! When you use the --consensus-caller model in bcftools call, the vcf header lacks the following two header lines:
+When you use the --consensus-caller model in bcftools, the vcf header lacks the following two header lines:
 
 ##fileformat=VCFv4.2
 
