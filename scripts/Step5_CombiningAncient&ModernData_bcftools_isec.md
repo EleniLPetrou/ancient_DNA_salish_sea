@@ -124,7 +124,29 @@ vcftools --vcf 0002.minDP3.recode.vcf \
 --out 0002.minDP3.filt
 
 ```
-After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7974 SNPs
+After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7974 SNPs in the ancient samples
+
+## Filtering modern data: 
+ - If we run the vcftools summary stats for the modern data (0003.vcf from above), we will see that there are no SNPs with more than 20% missing data
+ - However, there are individuals with more than 30% missing data.
+ 
+ ``` bash
+
+# Create a "badlist" of individuals with more than 30% missing data.
+
+mawk '$5 > 0.30' modern.imiss | cut -f1 | mawk '!/IN/'> modern_bad_indiv.txt
+cat modern_bad_indiv.txt
+
+vcftools --vcf 0003.vcf \
+--remove modern_bad_indiv.txt \
+--exclude-positions ancient_bad_loci.txt \ #remove the loci that were flagged in the ancient samples from the modern samples
+--recode --recode-INFO-all \
+--out 0003.filt
+ ```
+ 
+After filtering the modern genotypes, I kept 381 out of 382 Individuals and 6601 out of a possible 7974 Sites
+
+
 
 
 
