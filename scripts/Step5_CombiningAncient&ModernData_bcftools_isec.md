@@ -120,7 +120,7 @@ vcftools --vcf 0002.minDP3.recode.vcf \
 --out 0002.minDP3.filt
 
 ```
-### After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7974 Sites
+After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7974 SNPs
 
 
 
