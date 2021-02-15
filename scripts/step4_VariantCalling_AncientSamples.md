@@ -85,16 +85,55 @@ Usage:   bcftools call [options] <in.vcf.gz>
 ``` bash
 BAMDIR=/media/ubuntu/hybridization_capture/ancient_samples/mapdamage_bam #directory with sorted, indexed, filtered, and base-recalibrated .bam files
 INFILE=mpileup_results.bcf
+OUTDIR=/media/ubuntu/hybridization_capture/ancient_samples/variants
 OUTFILE=ancient_call_results.bcf
 ####
 
 cd $BAMDIR
+
 bcftools call --variants-only \
 --consensus-caller \
 --keep-alts \
 --format-fields GQ \
 --output-type b \
---output $OUTFILE \
+--output $OUTDIR'/'$OUTFILE \
 $INFILE
+```
+
+### Filter the genotypes for quality using *bcftools* and missing data using *vcftools*
+
+I did this iteratively, starting with very permissive thresholds (MINQ== 30; missing data = 75%) and visualizing the distribution of samples and genotypes. I observed that relatively few individuals and SNPs were characterized by large amounts of low-quality or missing data, so I happily proceeded to filter the genotypes using more stringent thresholds (minQ==900; missing data = 20%). For the sake of brevity, I show the final filtering criteria here: 
+- minQ 900:  QUAL > 900
+--max-missing 0.8: filter out genotypes called in less than 80% of all samples (this syntax is kind of counter-intuitive, so be careful)
+
+After filtering using these criteria, I kept 604,412 out of a possible 5,175,313 sites
+
+``` bash
+DIR=/media/ubuntu/hybridization_capture/ancient_samples/variants
+INFILE=ancient_call_results.bcf
+BASEVCF=ancient_call_results.qual900.miss20
+VCF=ancient_call_results.qual900.miss20.vcf
+#####
+cd $DIR
+
+vcftools --bcf $INFILE \
+--minQ 900 \
+--max-missing 0.8 \
+--recode \
+--recode-INFO-all \
+--out $BASEVCF
+
+# Use vcftools to output some useful summary statistics for plotting
+
+vcftools --vcf $VCF --depth
+vcftools --vcf $VCF --site-mean-depth
+vcftools --vcf $VCF --site-quality
+vcftools --vcf $VCF --missing-indv
+vcftools --vcf $VCF --missing-site
 
 ```
+
+
+
+
+
