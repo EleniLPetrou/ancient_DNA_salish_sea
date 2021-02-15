@@ -46,8 +46,8 @@ INFO/AD  .. Total allelic depth (Number=R,Type=Integer)
 BAMDIR=/media/ubuntu/hybridization_capture/ancient_samples/mapdamage_bam #directory with sorted, indexed, filtered, and base-recalibrated .bam files
 GENOMEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome # Path to directory with genome.
 REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome fasta file name
-BAMLIST=mybamlist.txt
-OUTFILE=mpileup_results.bcf
+BAMLIST=mybamlist.txt # List of bamfiles that you will create
+OUTFILE=mpileup_results.bcf #name of output file
 #####
 
 #1. Create list of bam files and save to a txt file:
@@ -84,9 +84,9 @@ Usage:   bcftools call [options] <in.vcf.gz>
 
 ``` bash
 BAMDIR=/media/ubuntu/hybridization_capture/ancient_samples/mapdamage_bam #directory with sorted, indexed, filtered, and base-recalibrated .bam files
-INFILE=mpileup_results.bcf
-OUTDIR=/media/ubuntu/hybridization_capture/ancient_samples/variants
-OUTFILE=ancient_call_results.bcf
+INFILE=mpileup_results.bcf #name of input file (created by previous step)
+OUTDIR=/media/ubuntu/hybridization_capture/ancient_samples/variants #directory for output files
+OUTFILE=ancient_call_results.bcf #name for output file with ancient genotypes
 ####
 
 cd $BAMDIR
@@ -103,16 +103,18 @@ $INFILE
 ### Filter the genotypes for quality using *bcftools* and missing data using *vcftools*
 
 I did this iteratively, starting with very permissive thresholds (MINQ== 30; missing data = 75%) and visualizing the distribution of samples and genotypes. I observed that relatively few individuals and SNPs were characterized by large amounts of low-quality or missing data, so I happily proceeded to filter the genotypes using more stringent thresholds (minQ==900; missing data = 20%). For the sake of brevity, I show the final filtering criteria here: 
+
 - minQ 900:  QUAL > 900
+
 --max-missing 0.8: filter out genotypes called in less than 80% of all samples (this syntax is kind of counter-intuitive, so be careful)
 
 After filtering using these criteria, I kept 604,412 out of a possible 5,175,313 sites
 
 ``` bash
-DIR=/media/ubuntu/hybridization_capture/ancient_samples/variants
-INFILE=ancient_call_results.bcf
-BASEVCF=ancient_call_results.qual900.miss20
-VCF=ancient_call_results.qual900.miss20.vcf
+DIR=/media/ubuntu/hybridization_capture/ancient_samples/variants # name of directory with bcf file containing genotype data
+INFILE=ancient_call_results.bcf # name of input bcf file
+BASEVCF=ancient_call_results.qual900.miss20 # 'basename' of filtered output vcf file (without extension)
+VCF=ancient_call_results.qual900.miss20.vcf # filtered output vcf file (with extension)
 #####
 cd $DIR
 
@@ -132,8 +134,22 @@ vcftools --vcf $VCF --missing-indv
 vcftools --vcf $VCF --missing-site
 
 ```
+### Fixed an irritating little issue with the first two lines of the vcf file
+!!!IMPORTANT!!! When you use the --consensus-caller model in bcftools call, the vcf header lacks the following two header lines:
 
+##fileformat=VCFv4.2
 
+##FILTER=<ID=PASS,Description="All filters passed">
+
+Thus, you have to copy and paste these header lines to the top of your vcf file before other programs can read in the vcf. This is how I did it:
+
+``` bash
+
+sed '1 i\##fileformat=VCFv4.2\n##FILTER=<ID=PASS,Description="All filters passed">' ancient_call_results.qual900.miss20.recode.vcf >ancient_call_results_filt.vcf
+
+less ancient_call_results_filt.vcf #check the header
+
+```
 
 
 
