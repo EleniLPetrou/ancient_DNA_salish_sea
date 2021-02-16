@@ -132,18 +132,38 @@ After filtering, kept 43 out of 47 Individuals and kept 6601 out of a possible 7
 
 ## Filtering modern data: 
  - If we run the vcftools summary stats for the modern data (0003.vcf from above), we will see that there are no SNPs with more than 20% missing data
+
+``` bash
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
+MERGEDIR=$BASEDIR'/'merged_analyses/variants
+INFILE=0003.vcf #name of input vcf 
+PREFIX=0003 #name of output vcf (without extension)
+
+####
+
+
+
+# calculate some summary statistics using vcftools (these will be used for filtering the individuals and genotypes later on)
+vcftools --vcf $INFILE --depth --out $PREFIX
+vcftools --vcf $INFILE  --site-mean-depth --out $PREFIX
+vcftools --vcf $INFILE  --site-quality --out $PREFIX
+vcftools --vcf $INFILE  --missing-indv --out $PREFIX
+vcftools --vcf $INFILE  --missing-site --out $PREFIX
+vcftools --vcf $INFILE  --get-INFO MQ --get-INFO AD --get-INFO GQ --out $PREFIX
+```
+
  - However, there are individuals with more than 30% missing data.
  
  ``` bash
 
 # Create a "badlist" of individuals with more than 30% missing data.
 
-mawk '$5 > 0.30' modern.imiss | cut -f1 | mawk '!/IN/'> modern_bad_indiv.txt
+mawk '$5 > 0.30' 0003.imiss | cut -f1 | mawk '!/IN/'> modern_bad_indiv.txt
 cat modern_bad_indiv.txt
 
 vcftools --vcf 0003.vcf \
 --remove modern_bad_indiv.txt \
---exclude-positions ancient_bad_loci.txt \ #remove the loci that were flagged in the ancient samples from the modern samples
+--exclude-positions ancient_bad_loci.txt \
 --recode --recode-INFO-all \
 --out 0003.filt
  ```
