@@ -24,7 +24,7 @@ Subsequently, genotypes with less than a read depth of three sequences were reco
    
    ``` bash
    # Directory names
-   BASEDIR=/media/ubuntu/hybridization_capture #base directory
+   BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
    MODERNDIR=$BASEDIR'/'modern_samples/variants
    ANCIENTDIR=$BASEDIR'/'ancient_samples/variants
    MERGEDIR=$BASEDIR'/'merged_analyses/variants
@@ -70,7 +70,7 @@ Subsequently, genotypes with less than a read depth of three sequences were reco
 After looking at some of the summary statistics plots for the ancient data (0002.vcf), I realized that many of the SNPs identified in the ancient data (N= 7974) were represented by a single read, and could be the result of sequencing error. For this reason, if a SNP had a read depth <3 in the ancient samples, I decided to set that SNP's genotypes to "missing data".
 
 ``` bash
-BASEDIR=/media/ubuntu/hybridization_capture #base directory
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
 MERGEDIR=$BASEDIR'/'merged_analyses/variants
 ####
 
@@ -94,7 +94,7 @@ vcftools --vcf 0002.minDP3.recode.vcf --get-INFO MQ --get-INFO AD --get-INFO GQ
 
 ### Create a "badlist" of ancient SNPs with more than 20% missing data.
 ``` bash 
-BASEDIR=/media/ubuntu/hybridization_capture #base directory
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
 MERGEDIR=$BASEDIR'/'merged_analyses/variants
 ####
 
@@ -105,7 +105,7 @@ head ancient_bad_loci.txt
 ```
 ### Create a "badlist" of ancient individuals with more than 30% missing data.
 ``` bash
-BASEDIR=/media/ubuntu/hybridization_capture #base directory
+BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
 MERGEDIR=$BASEDIR'/'merged_analyses/variants
 ####
 
