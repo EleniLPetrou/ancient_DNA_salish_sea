@@ -29,7 +29,7 @@ INFO/AD  .. Total allelic depth (Number=R,Type=Integer)
 
 
 ``` bash
-BAMDIR=/media/ubuntu/hybridization_capture/modern_samples/bam #directory with sorted, indexed, filtered modern herring .bam files
+BAMDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/modern_samples/bam #directory with sorted, indexed, filtered modern herring .bam files
 GENOMEDIR=/media/ubuntu/Herring_aDNA/atlantic_herring_genome # Path to directory with genome and genome index.
 REF=GCA_900700415.1_Ch_v2.0.2_genomic.fna # Genome fasta file name
 BAMLIST=mybamlist.txt # List of bamfiles that you will create
@@ -69,11 +69,14 @@ Usage:   bcftools call [options] <in.vcf.gz>
 -f, --format-fields <list>      output format fields: GQ,GP
 
 ``` bash
-BAMDIR=/media/ubuntu/hybridization_capture/modern_samples/bam #directory with sorted, indexed, filtered .bam files
+BAMDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/modern_samples/bam #directory with sorted, indexed, filtered .bam files
 INFILE=mpileup_results.bcf #name of input file (created by previous step)
-OUTDIR=/media/ubuntu/hybridization_capture/modern_samples/variants #directory for output files
+OUTDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/modern_samples/variants #directory for output files
 OUTFILE=modern_call_results.bcf #name for output file with ancient genotypes
 ####
+
+cd $OUTDIR
+touch $OUTFILE
 
 cd $BAMDIR
 
@@ -97,10 +100,10 @@ I did this iteratively, starting with very permissive thresholds (MINQ== 30; mis
 After filtering using these criteria, kept 12496 out of a possible 2080384 Sites
 
 ``` bash
-DIR=/media/ubuntu/hybridization_capture/modern_samples/variants # name of directory with bcf file containing genotype data
+DIR=/media/ubuntu/Herring_aDNA/hybridization_capture/modern_samples/variants # name of directory with bcf file containing genotype data
 INFILE=modern_call_results.bcf # name of input bcf file
 BASEVCF=modern_call_results.qual900.miss20.minDP10.minmeanDP10.maf5 # 'basename' of filtered output vcf file (without extension)
-VCF=modern_call_results.qual900.miss20.minDP10.minmeanDP10.maf5.vcf # filtered output vcf file (with extension)
+VCF=modern_call_results.qual900.miss20.minDP10.minmeanDP10.maf5.recode.vcf # filtered output vcf file (with extension)
 #####
 cd $DIR
 
@@ -133,7 +136,7 @@ When you use the --consensus-caller model in bcftools, the vcf header lacks the 
 Thus, you have to copy and paste these header lines to the top of your vcf file before other programs can read in the vcf. This is how I did it:
 
 ``` bash
-DIR=/media/ubuntu/hybridization_capture/modern_samples/variants # name of directory with bcf file containing genotype data
+DIR=/media/ubuntu/Herring_aDNA/hybridization_capture/modern_samples/variants # name of directory with bcf file containing genotype data
 INVCF=modern_call_results.qual900.miss20.minDP10.minmeanDP10.maf5.vcf # name of input file (from previous step)
 OUTVCF=modern_call_results_filt.vcf
 ####
