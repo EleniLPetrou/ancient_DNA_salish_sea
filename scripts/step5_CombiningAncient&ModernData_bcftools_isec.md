@@ -72,21 +72,25 @@ After looking at some of the summary statistics plots for the ancient data (0002
 ``` bash
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture #base directory
 MERGEDIR=$BASEDIR'/'merged_analyses/variants
+INFILE=0002.vcf #name of input vcf 
+FILTFILE=0002.minDP3.recode.vcf #name of output vcf (with extension)
+FILTPREFIX=0002.minDP3 #name of output vcf (without extension)
+
 ####
 
 cd $MERGEDIR
-vcftools --vcf 0002.vcf \
+vcftools --vcf $INFILE \
 --minDP 3 \
 --recode --recode-INFO-all \
---out 0002.minDP3
+--out $FILTPREFIX
 
 # calculate some summary statistics using vcftools (these will be used for filtering the individuals and genotypes later on)
-vcftools --vcf 0002.minDP3.recode.vcf --depth
-vcftools --vcf 0002.minDP3.recode.vcf --site-mean-depth
-vcftools --vcf 0002.minDP3.recode.vcf --site-quality
-vcftools --vcf 0002.minDP3.recode.vcf --missing-indv
-vcftools --vcf 0002.minDP3.recode.vcf --missing-site
-vcftools --vcf 0002.minDP3.recode.vcf --get-INFO MQ --get-INFO AD --get-INFO GQ
+vcftools --vcf $FILTFILE --depth --out $FILTPREFIX
+vcftools --vcf $FILTFILE  --site-mean-depth --out $FILTPREFIX
+vcftools --vcf $FILTFILE  --site-quality --out $FILTPREFIX
+vcftools --vcf $FILTFILE  --missing-indv --out $FILTPREFIX
+vcftools --vcf $FILTFILE  --missing-site --out $FILTPREFIX
+vcftools --vcf $FILTFILE  --get-INFO MQ --get-INFO AD --get-INFO GQ --out $FILTPREFIX
 ```
 
 ## Filtering ancient data: 
