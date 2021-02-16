@@ -148,7 +148,7 @@ Thus, you have to copy and paste these header lines to the top of your vcf file 
 
 ``` bash
 DIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples/variants # name of directory with bcf file containing genotype data
-INVCF=ancient_call_results.qual900.miss20.recode.vcf# name of input bcf file
+INVCF=ancient_call_results.qual900.miss20.recode.vcf #name of input vcf file (from previous step)
 OUTVCF=ancient_call_results_filt.vcf
 ####
 cd $DIR
