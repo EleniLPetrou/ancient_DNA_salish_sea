@@ -176,7 +176,7 @@ write.table(final_df , file = paste0(mypath_out,output_file) , quote = FALSE, ro
 ```
 
 
-Now that I have identified a list of loci that are out of HWE in the modern samples,
+Now that I have identified a list of 52 loci that are out of HWE in the modern samples,
 I can exclude those loci from both the ancient and modern vcf files.
 First, I will copy the list into the variants_filtered directory
 
