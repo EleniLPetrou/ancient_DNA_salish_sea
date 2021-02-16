@@ -88,7 +88,11 @@ OUTDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples/variants
 OUTFILE=ancient_call_results.bcf #name for output file with ancient genotypes
 ####
 
+cd $OUTDIR
+touch $OUTFILE
+
 cd $BAMDIR
+
 
 bcftools call --variants-only \
 --consensus-caller \
