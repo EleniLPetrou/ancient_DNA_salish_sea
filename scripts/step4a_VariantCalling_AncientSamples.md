@@ -117,7 +117,7 @@ After filtering using these criteria, I kept 604,412 out of a possible 5,175,313
 DIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples/variants # name of directory with bcf file containing genotype data
 INFILE=ancient_call_results.bcf # name of input bcf file
 BASEVCF=ancient_call_results.qual900.miss20 # 'basename' of filtered output vcf file (without extension)
-VCF=ancient_call_results.qual900.miss20.vcf # filtered output vcf file (with extension)
+VCF=ancient_call_results.qual900.miss20.recode.vcf # filtered output vcf file (with extension)
 #####
 cd $DIR
 
