@@ -104,7 +104,7 @@ MERGEDIR=$BASEDIR'/'merged_analyses/variants
 
 cd $MERGEDIR
 head out.lmiss
-mawk '$6 > 0.20' out.lmiss | cut -f1,2 | mawk '!/CHR/' > ancient_bad_loci.txt
+mawk '$6 > 0.20' 0002.minDP3.lmiss | cut -f1,2 | mawk '!/CHR/' > ancient_bad_loci.txt
 head ancient_bad_loci.txt
 ```
 ### Create a "badlist" of ancient individuals with more than 30% missing data.
@@ -115,7 +115,7 @@ MERGEDIR=$BASEDIR'/'merged_analyses/variants
 
 cd $MERGEDIR
 head out.imiss
-mawk '$5 > 0.30' out.imiss | cut -f1 | mawk '!/IN/'> ancient_bad_indiv.txt
+mawk '$5 > 0.30' 0002.minDP3.imiss | cut -f1 | mawk '!/IN/'> ancient_bad_indiv.txt
 cat ancient_bad_indiv.txt
 ```
 ### Now that we have badlists of ancient sites and individuals, we can remove those sites and samples from our vcf file using vcftools:
