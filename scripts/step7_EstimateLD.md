@@ -100,9 +100,12 @@ do
     --out  $OUTDIR'/'$BASENAME.${chromosome};
 done
 ```
-
-
+## Part 3: 
+ - Run the script LD_decay_iterative over each directory: LD_modern and LD_ancient
+ 
+## Part 4: 
+- Plot the output of LD_decay over all chromosomes (Run the R script parse_Lddecay_output)
 Hypothesis:
 
-- The modern samples should display long-range LD on chrom 8, 12, and 15 (as seen with RAdseq paper)
+- The modern samples should definitely display long-range LD on chrom 8, 12, and 15 (as seen with RADseq paper)
 - the ancient samples...I guess if LD is still concentrated on those chromosomes, then that means that the putative inversions are quite old. I wonder what we will find, this is so exciting!!
