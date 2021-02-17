@@ -47,7 +47,7 @@ LR535875.1"
 
 for chromosome in $chromosomes
 do 
-    vcftools --vcf $VCF \
+    vcftools --vcf $VCFDIR'/'$VCF \
     --chr ${chromosome} \
     --recode --recode-INFO-all \
     --out  $OUTDIR'/'$BASENAME.${chromosome};
