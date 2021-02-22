@@ -94,4 +94,4 @@ ggsave(outfile,
 
 ## Take a look at the resulting plots
 
-![heterozygosity_plot](https://github.com/EleniLPetrou/ancient_DNA_salish_sea/blob/main/scripts/observed_heterozygosity.PNG?raw=true)
+![heterozygosity_plot](observed_heterozygosity.png)
