@@ -91,3 +91,7 @@ modern_df <- modern_df %>%
 ggsave(outfile,
   plot = multi_plot)
 ```
+
+## Take a look at the resulting plots
+
+![HI_plot](observed_heterozygosity.pdf)
