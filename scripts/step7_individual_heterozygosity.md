@@ -94,4 +94,6 @@ ggsave(outfile,
 
 ## Take a look at the resulting plots
 
+The distribution of observed heterozygosity is quite similar in the modern and ancient samples. Hurray!
+
 ![heterozygosity_plot](observed_heterozygosity.png)
