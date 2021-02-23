@@ -1,3 +1,7 @@
+# Check for duplicate samples in the ancient data set, using identity by descent
+
+Each ancient sample was a tiny herring bone. To minimize the probability of sampling multiple bones from each individual fish, we tried to use distinct prootic bones whenever possible. This was not always possible and to achieve decent sample sizes from each archaeological layer we extracted DNA from vertebra as well. In this analysis, I estimate pairwise identity by descent (IBD) in the ancient samples using  *plink*. 
+
 ## Step 1:  Prepare vcf file for plink
 
 Plink is very grumpy about vcf format (it expects human genome data), so I had to tidy up my vcf file before using plink
@@ -38,7 +42,7 @@ bcftools reheader --samples $BASENAME'_samples'.txt $INFILE > $BASENAME'.tidy.re
 bcftools annotate --set-id '%CHROM\_%POS' $BASENAME'.tidy.recode'.vcf --output $BASENAME'.tidy.snpid.recode'.vcf
 
 ```
-## Step 2:  Prepare vcf file for plink
+## Step 2:  Use *plink* to estimate Identity by Descent and identify ancient samples that might be replicate individuals
 
 
 ``` bash 
@@ -60,5 +64,9 @@ plink --genome  --allow-extra-chr --vcf $VCFDIR'/'$INFILE --out $OUTDIR'/'$OUTFI
 
 ### How to interpret the output of file file.genome
 
-Identical twins or duplicate samples with have a Z2 score of 1. The Z2 score expresses the probability of having two alleles identical by descent. 
+Z0 is the probability that at a given locus 0 alleles are identical by descent. If samples are unrelated,  Z0 will be close to 1.
+
+PI_HAT is a measure of overall alleles that are identical by descent. If samples are unrelated, PI_HAT will be close to 0.
+
+Z0, Z1, and Z2 segregate out the probabilities of having IBD of 0, 1, or 2 over the loci, which gives  a way of discriminating between relationship types. Ideal parent-offspring pair has (Z0, Z1, Z2) = (0, 1, 0), i.e. all loci have one allele identical by descent; ideal full sibling = (1/4, 1/2, 1/4), i.e. 25% of loci have 0 alleles IBD, 50% have 1 allele IBD, 25% have 2 alleles IBD. Identical twins or duplicate samples with have an IBD Z2 score that is equal to 1. 
 
