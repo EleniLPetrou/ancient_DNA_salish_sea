@@ -12,8 +12,8 @@ As a first stab at this, I estimated LD separately for modern and ancient sample
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/merged_analyses
 VCFDIR=$BASEDIR'/'variants_filtered #directory containing vcf files
 OUTDIR=$BASEDIR'/'LD_modern
-VCF=0003.filt.HWE.recode.vcf #(with extension)
-BASENAME=0003.filt.HWE #(vcf file without extension)
+VCF=0003.filt.HWE.tidy.snpid.nodup.recode.vcf #(with extension)
+BASENAME=0003.filt.HWE.tidy.snpid.nodup #(vcf file without extension)
 
 # List of chromosomes in the Atlantic herring genome
 
@@ -59,8 +59,8 @@ done
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/merged_analyses
 VCFDIR=$BASEDIR'/'variants_filtered #directory containing vcf files
 OUTDIR=$BASEDIR'/'LD_ancient
-VCF=0002.filt.HWE.recode.vcf #(with extension)
-BASENAME=0002.filt.HWE #(vcf file without extension)
+VCF=0002.filt.HWE.tidy.snpid.nodup.recode.vcf #(with extension)
+BASENAME=0002.filt.HWE.tidy.snpid.nodup #(vcf file without extension)
 
 # List of chromosomes in the Atlantic herring genome
 
