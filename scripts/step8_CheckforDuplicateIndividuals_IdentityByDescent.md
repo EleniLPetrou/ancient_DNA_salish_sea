@@ -27,7 +27,7 @@ bcftools query --list-samples $INFILE > $BASENAME'_samples'.txt
 # sed -i 's/old-text/new-text/g' input.txt. The s is the substitute command of sed for find and replace.
 # It tells sed to find all occurrences of ‘old-text’ and replace with ‘new-text’ in a file named input.txt
 
-sed -i 's/_sorted_rd_realign//g' $BASENAME'_samples'.txt 
+sed -i 's/_sorted_rd_realign.bam//g' $BASENAME'_samples'.txt 
 
 
 # Rename the samples using bcftools reheader
@@ -175,18 +175,18 @@ VCFDIR=$BASEDIR'/'variants_filtered #vcf directory
 ########
 cd $VCFDIR
 
-vcftools --vcf 0002.filt.HWE.tidy.snpid.recode.vcf \
---remove-indv SmBy15_006 \
---recode --recode-INFO-all \
---out 0002.filt.HWE.tidy.snpid.nodup
-
-
 vcftools --vcf 0003.filt.HWE.tidy.snpid.recode.vcf \
+--remove-indv SmBy15_006.bam \
+--recode --recode-INFO-all \
+--out 0003.filt.HWE.tidy.snpid.nodup
+
+
+vcftools --vcf 0002.filt.HWE.tidy.snpid.recode.vcf \
 --remove-indv 2B_08 \
 --remove-indv 2B_10 \
 --remove-indv 2B_19 \
 --recode --recode-INFO-all \
---out 0003.filt.HWE.tidy.snpid.nodup
+--out 0002.filt.HWE.tidy.snpid.nodup
 
 ```
 
