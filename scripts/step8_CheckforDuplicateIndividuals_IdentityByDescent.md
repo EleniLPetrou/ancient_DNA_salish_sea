@@ -42,7 +42,7 @@ bcftools reheader --samples $BASENAME'_samples'.txt $INFILE > $BASENAME'.tidy.re
 bcftools annotate --set-id '%CHROM\_%POS' $BASENAME'.tidy.recode'.vcf --output $BASENAME'.tidy.snpid.recode'.vcf
 
 ```
-## Step 2:  Use *plink* to estimate Identity by Descent and identify ancient samples that might be replicate individuals
+## Step 2:  Use *plink* to estimate IBD and identify ancient samples that might be replicate individuals
 
 
 ``` bash 
