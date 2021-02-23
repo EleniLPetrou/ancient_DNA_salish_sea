@@ -8,6 +8,7 @@ As a first stab at this, I estimated LD separately for modern and ancient sample
  - For each class of samples (ancient vs. modern) split the vcf by chromosome
 
 ### Modern samples
+
 ``` bash
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/merged_analyses
 VCFDIR=$BASEDIR'/'variants_filtered #directory containing vcf files
