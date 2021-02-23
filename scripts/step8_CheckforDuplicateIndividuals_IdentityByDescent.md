@@ -157,10 +157,10 @@ All other samples had a Z2 value that was ~0.
 
 | sample1        | sample 2     | Z2           |
 | :------------- | :----------: | -----------: |
-|  2B_08.bam     | 2B_13.bam    | 0.9095       |
-|  2B_10.bam     | 2B_12.bam    | 0.9637       |
-|  2B_14.bam     | 2B_19.bam    | 0.9677       |
-| SmBy15_005.bam | SmBy15_006.bam | 0.9865     |
+|  2B_08         | 2B_13        | 0.9095       |
+|  2B_10         | 2B_12        | 0.9637       |
+|  2B_14         | 2B_19        | 0.9677       |
+| SmBy15_005     | SmBy15_006   | 0.9865     |
 
 I will remove the following individuals from the vcf because they have larger amounts of missing genotypes: 
 - 2B_08
@@ -176,7 +176,7 @@ VCFDIR=$BASEDIR'/'variants_filtered #vcf directory
 cd $VCFDIR
 
 vcftools --vcf 0003.filt.HWE.tidy.snpid.recode.vcf \
---remove-indv SmBy15_006.bam \
+--remove-indv SmBy15_006 \
 --recode --recode-INFO-all \
 --out 0003.filt.HWE.tidy.snpid.nodup
 
