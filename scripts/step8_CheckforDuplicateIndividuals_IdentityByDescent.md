@@ -62,11 +62,103 @@ plink --genome  --allow-extra-chr --vcf $VCFDIR'/'$INFILE --out $OUTDIR'/'$OUTFI
 
 ```
 
-### How to interpret the output of file file.genome
+### How to interpret the output of output file.genome
 
 Z0 is the probability that at a given locus 0 alleles are identical by descent. If samples are unrelated,  Z0 will be close to 1.
 
 PI_HAT is a measure of overall alleles that are identical by descent. If samples are unrelated, PI_HAT will be close to 0.
 
 Z0, Z1, and Z2 segregate out the probabilities of having IBD of 0, 1, or 2 over the loci, which gives  a way of discriminating between relationship types. Ideal parent-offspring pair has (Z0, Z1, Z2) = (0, 1, 0), i.e. all loci have one allele identical by descent; ideal full sibling = (1/4, 1/2, 1/4), i.e. 25% of loci have 0 alleles IBD, 50% have 1 allele IBD, 25% have 2 alleles IBD. Identical twins or duplicate samples with have an IBD Z2 score that is equal to 1. 
+
+## Step 3: Parse the output of IBD analysis in R
+
+The code below can be used to identify samples are are duplicate pairs and plot the distribution of Z2 scores. 
+
+``` r
+# The purpose of this script is to make plots of identity by descent, estimated by plink --genome
+
+# Load libraries
+library(tidyverse)
+library(cowplot)
+
+# Specify the directory containing the data tables:
+DATADIR <- "G:/hybridization_capture/merged_analyses/plink"
+
+# Setwd
+setwd(DATADIR)
+list.files()
+
+# specify input and output file names:
+ancient_file <- "0002.filt.HWE.tidy.snpid.pruned.recode.genome"
+modern_file <- "0003.filt.HWE.tidy.snpid.pruned.recode.genome" 
+
+outfile1 <- "identity_by_descent.pdf"
+outfile2 <- "identity_by_descent.txt"
+
+# read in the data
+ancient_df <- read.delim(ancient_file, sep = "")
+modern_df <- read.delim(modern_file, sep = "")  
+
+# Are there any samples whose Z2 score is ~1? These are either identical twins or duplicates
+
+
+ancient_df %>%
+  filter(Z2 > 0.50)
+
+modern_df %>%
+  filter(Z2 > 0.50)  
+
+dup_df <- bind_rows(filter(ancient_df, Z2 > 0.5),filter(modern_df, Z2 > 0.5))%>%
+  unite(sample1, FID1:IID1) %>%
+  unite(sample2, FID2:IID2)
+
+# Plot the Z2 score for each collection
+
+
+(plot_anc <- ggplot(ancient_df, aes(x = Z2)) +
+    geom_histogram(binwidth = 0.01, fill = "#fc8d59") +
+    theme_bw() +
+    xlab("Z2 score") +
+    ggtitle("Ancient herring"))
+
+(plot_mod <- ggplot(modern_df, aes(x = Z2)) +
+    geom_histogram(binwidth = 0.01, fill = "#91bfdb") +
+    theme_bw()+
+    xlab("Z2 score")+
+    ggtitle("Modern herring"))
+
+
+# Merge the plots
+
+(multi_plot <- plot_grid(plot_anc, plot_mod, labels = c('A', 'B'), label_size = 12))
+
+
+# save plot to pdf file
+
+ggsave(outfile1,
+       plot = multi_plot)
+
+# save a tab-delimited text file with the names of duplicate pairs
+
+write.table(dup_df, 
+            file = outfile2, 
+            append = FALSE, 
+            quote = FALSE, 
+            sep = "\t",
+            row.names = FALSE)
+
+
+```
+
+Results:
+
+I identified 3 pairs of samples that are likely duplicate individuals in the anceint data, and 1 set of samples in the modern data (surprise! lol). 
+All other samples had a Z2 value that was ~0.
+
+| sample1        | sample 2     | Z2           |
+| :------------- | :----------: | -----------: |
+|  2B_08.bam     | 2B_13.bam    | 0.9110       |
+|  2B_10.bam     | 2B_12.bam    | 0.9677       |
+|  2B_14.bam     | 2B_19.bam    | 0.9696       |
+| SmBy15_005.bam | SmBy15_006.bam | 0.9865       |
 
