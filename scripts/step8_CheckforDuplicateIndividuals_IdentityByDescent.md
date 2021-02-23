@@ -89,8 +89,8 @@ setwd(DATADIR)
 list.files()
 
 # specify input and output file names:
-ancient_file <- "0002.filt.HWE.tidy.snpid.pruned.recode.genome"
-modern_file <- "0003.filt.HWE.tidy.snpid.pruned.recode.genome" 
+ancient_file <- "0002.filt.HWE.tidy.snpid.recode.genome"
+modern_file <- "0003.filt.HWE.tidy.snpid.recode.genome" 
 
 outfile1 <- "identity_by_descent.pdf"
 outfile2 <- "identity_by_descent.txt"
@@ -157,8 +157,8 @@ All other samples had a Z2 value that was ~0.
 
 | sample1        | sample 2     | Z2           |
 | :------------- | :----------: | -----------: |
-|  2B_08.bam     | 2B_13.bam    | 0.9110       |
-|  2B_10.bam     | 2B_12.bam    | 0.9677       |
-|  2B_14.bam     | 2B_19.bam    | 0.9696       |
+|  2B_08.bam     | 2B_13.bam    | 0.9095       |
+|  2B_10.bam     | 2B_12.bam    | 0.9637       |
+|  2B_14.bam     | 2B_19.bam    | 0.9677       |
 | SmBy15_005.bam | SmBy15_006.bam | 0.9865       |
 
