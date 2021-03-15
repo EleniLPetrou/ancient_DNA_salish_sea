@@ -190,3 +190,89 @@ vcftools --vcf 0002.filt.HWE.tidy.snpid.recode.vcf \
 
 ```
 
+## Step 4: Estimate the genotyping error rate between replicate samples 
+
+I estimated the genotyping error rate between the pairs of samples that were replicate individuals in the ancient and modern data sets.
+I did this by writing a simple R script that takes a vcf file as input and compares genotypes across specific user-defined pairs of samples. 
+The genotyping error rate was defined as the number of genotype mismatches divided by the total number of genotyped loci.
+
+``` r
+# The purpose of this script is to take a vcf file and evaluate the genotyping error rate between pairs of individuals
+# that are known duplicate samples. I define the genotyping error rate as the number of mismatched genotypes divided by 
+# the number of loci genotyped (i.e. excluding missing loci with missing data)
+
+
+###################
+library(vcfR)
+library(genetics)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+#To run this code, put all of your vcf files in a single directory
+
+#setwd
+
+setwd("G:/hybridization_capture/merged_analyses/variants_filtered")
+list.files()
+
+# set file names
+
+input_fileName <-  "0002.filt.HWE.tidy.snpid.recode.vcf" 
+
+
+# Specify which samples are the duplicate pairs
+pair1 <- c("2B_08", "2B_13")
+pair2 <- c("2B_10", "2B_12")
+pair3 <- c("2B_14", "2B_19")
+
+################################################################################
+#read in vcf files in directory using vcfR, and start data processing
+
+vcf_data <- read.vcfR(input_fileName )
+
+vcf_data #take a peek
+head(vcf_data)
+
+#save metadata as dataframe - you will need this later for plotting
+vcf_df <- as.data.frame(vcf_data@fix)
+head(vcf_df) #check
+class(vcf_df) #should be dataframe
+
+
+#use vcfR to extract the genotypes from the vcf file --> make matrix
+gt <- extract.gt(vcf_data, return.alleles = TRUE)
+gt[1:4, 1:4] #take a peek
+class(gt) #should be matrix
+
+gt_df <- as.data.frame(gt)
+head(gt_df)
+
+# pair-wise comparison
+list_pairs <- list(pair1, pair2, pair3)
+
+for (pair in list_pairs) {
+  pair_df <- gt_df %>%
+  select(pair) 
+  
+  mismatch_df <- pair_df %>%
+  mutate(geno_mismatch = if_else(pair_df[1] == pair_df[2], 1, 0)) %>%
+  filter(geno_mismatch == 0)
+  
+  missing_df <- mismatch_df %>%
+  filter(mismatch_df[1] == "." | mismatch_df[2] == ".")
+  
+  
+  genotyping_error_rate = (nrow(mismatch_df) - nrow(missing_df))/(nrow(gt_df) - nrow(missing_df))
+  print(pair)
+  print(genotyping_error_rate)
+  }
+
+```
+
+| sample1        | sample 2     | genotyping error rate           |
+| :------------- | :----------: | -----------: |
+|  2B_08         | 2B_13        | 0.0239       |
+|  2B_10         | 2B_12        | 0.0100       |
+|  2B_14         | 2B_19        | 0.0085       |
+| SmBy15_005     | SmBy15_006   | 0.0036     |
