@@ -1,6 +1,6 @@
 # Hybridization capture of ancient DNA 
 
-![bone-img](example_figures/bone.png)
+![bone-img](bone.png)
 
 This repository contains the scripts that were used in the manuscript *"Hybridization capture of ancient DNA reveals harvest of winter-spawning herring populations by Coast Salish fisheries over 900 years"*.
 
