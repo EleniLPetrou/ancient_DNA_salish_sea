@@ -93,6 +93,26 @@ OUTDIR=trimmed_fastq #name of output directory
 cutadapt -g file:$BASEDIR'/'$BARCODES -e $ERROR -m $MINLENGTH --no-indels --discard-untrimmed -o $BASEDIR'/'$OUTDIR'/'"{name}.fastq" $BASEDIR'/'$INPUTFILE 
 
 ```
+Next, I estimated the number of sequences obtained for each sample
+
+``` bash
+
+DATADIR=/media/ubuntu/Herring_aDNA/hybridization_capture/ancient_samples/trimmed_fastq # Directory with fastq files
+OUTFILE=number_raw_sequences.txt
+
+cd $DATADIR 
+
+# To find the number of raw sequences per sample, calculate the number of lines in each fastq file and divide it by four.
+
+for MYFILE in *.fastq
+do
+	READS=`expr $(cat $MYFILE | wc -l) / 4`
+	echo $MYFILE $READS >> $OUTFILE
+done
+
+```
+After demultiplexing and adapter trimming, we obtained xx million reads per ancient sample on average (median = , range = ). 
+
 
 # Quality control of sequencing data using *FastQC*
 
