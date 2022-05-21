@@ -7,9 +7,7 @@ for the ancient samples and modern samples. Here is what I did:
 
 ``` bash
 
-# Use vcftools to estimate individual heterozygosity in modern and ancient samples
-
-This script shows how I did it for the modern samples (prefix 0003)
+# Use vcftools to estimate individual heterozygosity in modern and ancient samples. This script shows how I did it for the modern samples (prefix 0003)
 
 # Specify the directory names and file names
 BASEDIR=/media/ubuntu/Herring_aDNA/hybridization_capture/merged_analyses #base directory
@@ -57,14 +55,11 @@ ancient_df <- ancient_df %>%
   mutate(N_HET = (N_SITES-O.HOM.)) %>%
   mutate(OBS_HET = N_HET/N_SITES)
 
-
 modern_df <- modern_df %>%
   mutate(N_HET = (N_SITES-O.HOM.)) %>%
   mutate(OBS_HET = N_HET/N_SITES)
 
 # Plot the observed heterozygosity for each collection
-
-
 
 (plot_anc <- ggplot(ancient_df, aes(x = OBS_HET)) +
   geom_histogram(binwidth = 0.01, fill = "#fc8d59") +
